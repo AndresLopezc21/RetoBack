@@ -2,8 +2,8 @@ const db = require('../util/dbConnection');
 
 // GET /Muestra información breve de todas las tareas
 
-exports.getPostAll = async (req, res, next) => {
-  await db.execute('SELECT id, titulo, status, fecha FROM tareas;')
+exports.getByResponsable = async (req, res, next) => {
+  await db.execute(`SELECT id, titulo, status, fecha FROM tareas WHERE responsable= ${req.params.responsibleOf};`)
     .then((res2) => {
       res.status(200).json(res2[0]);
     })
@@ -14,7 +14,7 @@ exports.getPostAll = async (req, res, next) => {
 
 // GET /Muestra información completa sobre una tarea a consultar por su id
 
-exports.getPost = async (req, res, next) => {
+exports.getById = async (req, res, next) => {
   await db.execute(`SELECT t.*, us.nombreUsuario FROM retoback.tareas as t LEFT JOIN retoback.usuario as us ON t.responsable = us.idUsuario WHERE t.id = ${req.params.id};`)
     .then((res2) => {
       res.status(200).json(res2[0]);
