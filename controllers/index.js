@@ -15,7 +15,10 @@ exports.getByResponsable = async (req, res, next) => {
 // GET /Muestra información completa sobre una tarea a consultar por su id
 
 exports.getById = async (req, res, next) => {
-  await db.execute(`SELECT t.*, us.nombreUsuario FROM retoback.tareas as t LEFT JOIN retoback.usuario as us ON t.responsable = us.idUsuario WHERE t.id = ${req.params.id};`)
+  await db.execute(`SELECT t.*, us.nombreUsuario 
+                    FROM retoback.tareas as t 
+                    LEFT JOIN retoback.usuario as us 
+                    ON t.responsable = us.idUsuario WHERE t.id = ${req.params.id};`)
     .then((res2) => {
       res.status(200).json(res2[0]);
     })
