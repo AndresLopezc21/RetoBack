@@ -1,15 +1,27 @@
 const db = require('../util/dbConnection');
 
-// GET /Muestra información breve de todas las tareas
+// GET /Muestra información breve de todas las tareas de un solo responsable en caso de seleccionar el responsable 0 muestra todas las tareas
 
 exports.getByResponsable = async (req, res, next) => {
-  await db.execute(`SELECT id, titulo, status, fecha FROM tareas WHERE responsable= ${req.params.responsibleOf};`)
-    .then((res2) => {
-      res.status(200).json(res2[0]);
-    })
-    .catch((e) => {
-      res.status(404).json(e);
-    });
+  if (req.params.responsibleOf == 0) {
+    await db.execute('SELECT id, titulo, status, fecha FROM tareas;')
+      .then((res2) => {
+        res.status(200).json(res2[0]);
+      })
+      .catch((e) => {
+        res.status(404).json(e);
+      });
+  }
+  else {
+    await db.execute(`SELECT id, titulo, status, fecha FROM tareas WHERE responsable= ${req.params.responsibleOf};`)
+      .then((res2) => {
+        res.status(200).json(res2[0]);
+      })
+      .catch((e) => {
+        res.status(404).json(e);
+      });
+  }
+
 }
 
 // GET /Muestra información completa sobre una tarea a consultar por su id
@@ -64,32 +76,32 @@ exports.createPost = async (req, res, next) => {
 
 exports.editRow = async (req, res, next) => {
   const newValues = req.body;
-  if (!newValues.title || !newValues.description || !newValues.status || !newValues.date){
-        res.status(400).send('Asegurate de ingresar los datos obligatorios (titulo, descripción, estatus y fecha)');
+  if (!newValues.title || !newValues.description || !newValues.status || !newValues.date) {
+    res.status(400).send('Asegurate de ingresar los datos obligatorios (titulo, descripción, estatus y fecha)');
   }
-  else{
-  const title = newValues.title;
-  const description = newValues.description;
-  const status = newValues.status;
-  const date = newValues.date;
-  const comments = newValues.comments;
-  const tags = newValues.tags;
+  else {
+    const title = newValues.title;
+    const description = newValues.description;
+    const status = newValues.status;
+    const date = newValues.date;
+    const comments = newValues.comments;
+    const tags = newValues.tags;
 
-  post: { title, description, status, date, comments, tags }
+    post: { title, description, status, date, comments, tags }
 
-  await db.execute(`UPDATE tareas SET titulo = '${title}', descripcion = '${description}', status = '${status}',
+    await db.execute(`UPDATE tareas SET titulo = '${title}', descripcion = '${description}', status = '${status}',
                                       fecha = '${date}', comentarios = '${comments}', tags = '${tags}' 
                                   WHERE (id = ${req.params.id});`)
-    .then((res2) => {
-      res.status(200).json({
-        message: 'Se modifico la tarea seleccionada correctamente'
+      .then((res2) => {
+        res.status(200).json({
+          message: 'Se modifico la tarea seleccionada correctamente'
+        });
+      })
+      .catch((e) => {
+        res.status(404).json(e);
       });
-    })
-    .catch((e) => {
-      res.status(404).json(e);
-    });
 
- }
+  }
 }
 
 // DELETE / Da de alta las tareas en la tabla dentro de la db 

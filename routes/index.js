@@ -5,7 +5,7 @@ const indexController = require('../controllers/index');
 
 const router = express.Router();
 
-// GET /Obtener la información de breve de todas las tareas
+// GET /Obtener la información de breve de todas las tareas de un solo responsable
 router.get('/getByResponsable/:responsibleOf', indexController.getByResponsable);
 
 // GET /Obtener una descripción completa de la tarea a consultar
