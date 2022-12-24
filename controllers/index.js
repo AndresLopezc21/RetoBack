@@ -1,6 +1,7 @@
 const db = require('../util/dbConnection');
 
-// GET /Muestra información breve de todas las tareas de un solo responsable en caso de seleccionar el responsable 0 muestra todas las tareas
+// GET /Muestra información breve de todas las tareas de un solo responsable 
+//      en caso de seleccionar el responsable = 0 muestra todas las tareas
 
 exports.getByResponsable = async (req, res, next) => {
   if (req.params.responsibleOf == 0) {
@@ -40,7 +41,7 @@ exports.getById = async (req, res, next) => {
 
 }
 
-// POST / Da de alta las tareas en la tabla dentro de la db 
+// POST / Da de alta la tarea en la tabla dentro de la db 
 
 exports.createPost = async (req, res, next) => {
   const newTarea = req.body;
@@ -104,7 +105,7 @@ exports.editRow = async (req, res, next) => {
   }
 }
 
-// DELETE / Da de alta las tareas en la tabla dentro de la db 
+// DELETE / Da de baja las tarea con el id que se le da 
 
 exports.deleteRow = async (req, res, next) => {
   await db.execute(`DELETE FROM tareas WHERE id =${req.params.id};`)
